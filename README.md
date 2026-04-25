@@ -8,7 +8,7 @@ Each script is named to reflect the subplot it generates, making it easy to trac
 
 ## Environment Setup
 
-The computational environment can be reproduced using the provided environment.yml file:
+The computational environment can be reproduced using the provided environment.yml file.
 
 ## Data Availability
 
