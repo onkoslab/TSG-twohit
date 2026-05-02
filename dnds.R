@@ -1,20 +1,22 @@
 library(dndscv)
 library(dplyr)
 
-# Gene level dnds
+data_dir <- "data"
+
+# Gene-level dnds
 
 # defining tsgs
-generoles = read.table("generoles.tsv", header=TRUE, sep="\t", stringsAsFactors=FALSE)
+generoles = read.table(file.path(data_dir, "generoles.tsv"), header=TRUE, sep="\t", stringsAsFactors=FALSE)
 tsgs = unique(generoles[which(generoles$role=='TSG'),]$Hugo_Symbol)
 tsgs[tsgs == "CDKN2A"] <- "CDKN2A.p16INK4a"
 
 # Pancancer TSG 1-hit mutations
-muts1hit = read.table("mutcat1hit_tsg.5col", header=TRUE, sep="\t", stringsAsFactors=FALSE)
+muts1hit = read.table(file.path(data_dir, "mutcat1hit_tsg.5col"), header=TRUE, sep="\t", stringsAsFactors=FALSE)
 dout1hit = dndscv(muts1hit, max_muts_per_gene_per_sample=3,max_coding_muts_per_sample =1000, outmats=T, gene_list = tsgs)
 ci1hit = geneci(dout1hit, gene_list = tsgs)
 
-# Pancancer TSG 1-hit mutations
-muts2hit = read.table("mutcat2hit_tsg.5col", header=TRUE, sep="\t", stringsAsFactors=FALSE)
+# Pancancer TSG 2-hit mutations
+muts2hit = read.table(file.path(data_dir, "mutcat2hit_tsg.5col"), header=TRUE, sep="\t", stringsAsFactors=FALSE)
 dout2hit = dndscv(muts2hit, max_muts_per_gene_per_sample=3,max_coding_muts_per_sample =1000, outmats=T, gene_list = tsgs)
 ci2hit = geneci(dout2hit, gene_list = tsgs)
 
@@ -60,10 +62,10 @@ plot2hit_df_long$class <- recode(
   tru = "Truncating"
 )
 
-write.table(dout1hit$sel_cv, "dndscv_tsgs_onehit_pvals.tsv", sep='\t', row.names=FALSE, quote=FALSE)
-write.table(plot1hit_df_long, "dndscv_tsgs_onehit_cis.tsv", sep='\t', row.names=FALSE, quote=FALSE)
-write.table(dout2hit$sel_cv, "dndscv_tsgs_twohit_pvals.tsv", sep='\t', row.names=FALSE, quote=FALSE)
-write.table(plot2hit_df_long, "dndscv_tsgs_twohit_cis.tsv", sep='\t', row.names=FALSE, quote=FALSE)
+write.table(dout1hit$sel_cv, file.path(data_dir, "dndscv_tsgs_onehit_pvals.tsv"), sep='\t', row.names=FALSE, quote=FALSE)
+write.table(plot1hit_df_long, file.path(data_dir, "dndscv_tsgs_onehit_cis.tsv"), sep='\t', row.names=FALSE, quote=FALSE)
+write.table(dout2hit$sel_cv, file.path(data_dir, "dndscv_tsgs_twohit_pvals.tsv"), sep='\t', row.names=FALSE, quote=FALSE)
+write.table(plot2hit_df_long, file.path(data_dir, "dndscv_tsgs_twohit_cis.tsv"), sep='\t', row.names=FALSE, quote=FALSE)
 
 # Global dnds
 
@@ -74,7 +76,7 @@ noness = unique(generoles[which(generoles$role=='nonessential'),]$Hugo_Symbol)
 noness <- setdiff(noness, "GPX6") # To avoid the dndscv error: The following input gene names are not in the RefCDS database: GPX6
 
 # defining high vs low twohitfreq tsgs
-twohitfreq = read.table("pancan_twohitfreq.tsv", header=TRUE, sep="\t", stringsAsFactors=FALSE)
+twohitfreq = read.table(file.path(data_dir, "pancan_twohitfreq.tsv"), header=TRUE, sep="\t", stringsAsFactors=FALSE)
 tsgshigh <- twohitfreq %>%
   dplyr::filter(X2hitfreq > 0.4, FDR < 0.05) %>%
   dplyr::pull(Hugo_Symbol) %>%
@@ -129,11 +131,12 @@ df_allhighlow <- bind_rows(
   extract_global(res2hitnoness, "Non-ESS","2-hit"),
 )
 
+# write outout
+
 write.table(
   as.data.frame(df_allhighlow),
-  "globaldnds.tsv",
+  file.path(data_dir, "globaldnds.tsv"),
   sep = "\t",
   row.names = FALSE,
   quote = FALSE
 )
-
