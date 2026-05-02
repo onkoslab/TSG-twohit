@@ -12,15 +12,15 @@ Each Python script is named after the subplot it generates, enabling direct mapp
 ## Repository Structure
 
 ├── scripts/ # Python and R scripts for analysis and plotting
-├── environment.yml # Python environment
-├── renv.lock # R environment
+<br>├── environment.yml # Python environment
+<br>├── renv.lock # R environment
 
 ## Data Availability
 
 All input data required to run the scripts can be downloaded from:
 https://drive.ncbs.res.in/index.php/s/3Byt2dpsDoYmfaB
 
-After downloading, place the files in: data/
+After downloading, place the files in a directory named 'data'.
 
 ## Environment Setup
 
