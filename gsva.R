@@ -11,8 +11,10 @@ library(genefilter)
 library(RColorBrewer)
 library(readxl)
 
+data_dir <- "data"
+
 ### Importing genes for 50 different hallmark pathways
-dat = as.matrix(read.csv("hall_mark_genes_df.csv", header = TRUE,row.names="X"))
+dat = as.matrix(read.csv(file.path(data_dir, "hall_mark_genes_df.csv"), header = TRUE,row.names="X"))
 
 geneSets <- list()
 ttd<-list()
@@ -23,7 +25,7 @@ for(i in 1:50)
   ttd<-append(ttd,dat[,i])
 }
 
-files <- c("gene_exp_LGG.csv", "gene_exp_UCEC.csv")
+files <- file.path(data_dir, c("gene_exp_LGG.csv", "gene_exp_UCEC.csv"))
 
 results_list <- lapply(files, function(f) {
   cts <- as.matrix(read.csv(f, row.names = "X"))
@@ -41,7 +43,7 @@ final_df <- final_df[!duplicated(rownames(final_df)), ]
 
 write.table(
   final_df,
-  file = "GSVA_pathway_scores_newLGGUCEC.tsv",
+  file = file.path(data_dir, "GSVA_pathway_scores_newLGGUCEC.tsv"),
   sep = "\t",
   quote = FALSE
 )
