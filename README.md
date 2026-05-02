@@ -4,7 +4,7 @@
 
 This repository contains scripts used for analyses and figure generation in the study:
 
-**“Genomic and Evolutionary Determinants of Two-hit Frequencies in Tumor Suppressor Genes.”**
+**Genomic and Evolutionary Determinants of Two-hit Frequencies in Tumor Suppressor Genes**
 
 Each Python script is named after the subplot it generates, enabling direct mapping between code and manuscript figures.
 
